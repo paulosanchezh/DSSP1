@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "arquitectura-db": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sqlite",
+        "arquitectura.db"
+      ]
+    }
+  }
+}
