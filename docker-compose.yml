@@ -1,0 +1,58 @@
+# docker-compose.yml - Orquestación de Servicios
+# Nota: Este archivo incluye servicios para demostración de "deriva arquitectónica"
+
+version: '3.8'
+
+services:
+  frontend:
+    image: frontend:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api-gateway
+
+  api-gateway:
+    image: api:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - user-db
+    environment:
+      - AUTH_URL=http://auth-service:3001
+      - DB_URL=postgresql://user-db:5432/users
+
+  auth-service:
+    image: auth-service:latest
+    ports:
+      - "3001:3001"
+    depends_on:
+      - user-db
+    environment:
+      - DB_URL=postgresql://user-db:5432/users
+
+  user-db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # SERVICIO NO DOCUMENTADO EN LA BASE DE DATOS
+  # Este servicio representa una "deriva arquitectónica"
+  redis-cache:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    depends_on:
+      - api-gateway
+    volumes:
+      - redis-data:/data
+
+volumes:
+  pgdata:
+  redis-data:

@@ -7,6 +7,21 @@
         "@modelcontextprotocol/server-sqlite",
         "arquitectura.db"
       ]
+    },
+    "auditor-archivos": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "c:\\Users\\paulo\\OneDrive\\Escritorio\\UCA\\DSSP1"
+      ]
+    },
+    "lector-web": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ]
     }
   }
 }

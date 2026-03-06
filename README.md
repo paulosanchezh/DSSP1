@@ -50,6 +50,77 @@ El sistema consta de 4 servicios con la siguiente estructura:
 - Bloquea el flujo completo de autenticación
 - Afecta tanto al API Gateway como al Frontend
 
+## Skills MCP Integradas
+
+### Skill 1: Auditor de Código (Filesystem MCP) 🔍
+
+**Problema Real**: La base de datos de arquitectura dice una cosa, pero el código fuente (docker-compose.yml) dice otra. Esto se llama **"deriva arquitectónica"** (architectural drift).
+
+**Utilidad**: El agente puede leer archivos locales del proyecto y compararlos con la base de datos para detectar inconsistencias automáticamente.
+
+**Servidor Configurado**: `auditor-archivos`
+
+### Skill 2: Investigador Externo (Fetch MCP) 🌐
+
+**Problema Real**: A veces la documentación necesita nutrirse de fuentes externas, como status pages de proveedores o estándares publicados.
+
+**Utilidad**: El agente puede hacer peticiones web para leer contenido de internet e incorporarlo al análisis.
+
+**Servidor Configurado**: `lector-web`
+
+## Configuración de Servidores MCP
+
+El archivo [.vscode/mcp.json](.vscode/mcp.json) está configurado con tres servidores:
+
+```json
+{
+  "servers": {
+    "arquitectura-db": "@modelcontextprotocol/server-sqlite",
+    "auditor-archivos": "@modelcontextprotocol/server-filesystem",
+    "lector-web": "@modelcontextprotocol/server-fetch"
+  }
+}
+```
+
+**Después de guardar, reinicia los servidores MCP desde el chat de Copilot.**
+
+## Caso de Uso: Detección de Inconsistencias + Diagrama
+
+Se ha creado un archivo de prueba [docker-compose.yml](docker-compose.yml) que incluye un servicio **Redis** que **NO está documentado en la base de datos**. Esto demuestra la "deriva arquitectónica".
+
+### El "Mega Prompt" para Demostración
+
+Copia y pega esto en el chat de Copilot con `@workspace`:
+
+```
+@workspace Usa tu herramienta de base de datos para leer la tabla 'servicios'.
+Usa tu herramienta de sistema de archivos para leer el archivo 'docker-compose.yml'.
+Compara ambos. ¿Hay algún servicio en el docker-compose que no esté documentado en la base de datos?
+Genera un diagrama Mermaid que incluya:
+- Todos los servicios de la base de datos (en verde)
+- Los servicios 'no documentados' del docker-compose en color rojo
+- Las dependencias entre ellos
+Explica las inconsistencias encontradas.
+```
+
+### Resultado Esperado
+
+El agente debería:
+1. ✅ Consultar `arquitectura.db` y obtener: Frontend, API Gateway, Auth Service, User DB
+2. ✅ Leer `docker-compose.yml` y obtener: frontend, api-gateway, auth-service, user-db, **redis-cache**
+3. ✅ Detectar que **Redis** no está en la BD
+4. ✅ Generar un diagrama Mermaid con Redis en rojo para revisión
+
+### ¿Por qué esto impresiona?
+
+Esto demuestra **orquestación de herramientas avanzada**:
+- ✅ Consulta SQL (base de datos)
+- ✅ Lectura de archivos locales (sistema de archivos)
+- ✅ Análisis lógico y comparación
+- ✅ Generación de visualizaciones (Mermaid)
+
+No es solo "autocompletar código", es un **agente inteligente que usa múltiples herramientas en secuencia** para resolver problemas reales.
+
 ## Instalación
 
 Instrucciones para instalar y configurar el proyecto. Por ejemplo:
