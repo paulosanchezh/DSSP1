@@ -1,0 +1,10 @@
+graph TD
+    A["Frontend"] --> B["API Gateway"]
+    B --> C["Auth Service"]
+    B --> D["User DB"]
+    C --> D
+
+    style C fill:#ff6b6b,stroke:#c92a2a,color:#fff
+
+    classDef activo fill:#51cf66,stroke:#2f9e44,color:#fff
+    class A,B,D activo
