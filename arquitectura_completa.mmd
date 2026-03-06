@@ -1,0 +1,17 @@
+graph TD
+    FRONTEND["Frontend"]
+    API_GATEWAY["API Gateway"]
+    AUTH_SERVICE["Auth Service"]
+    USER_DB["User DB"]
+    REDIS_CACHE["Redis Cache"]
+
+    FRONTEND --> API_GATEWAY
+    API_GATEWAY --> AUTH_SERVICE
+    API_GATEWAY --> USER_DB
+    AUTH_SERVICE --> USER_DB
+
+    style FRONTEND fill:#51cf66,stroke:#2f9e44,color:#fff
+    style API_GATEWAY fill:#51cf66,stroke:#2f9e44,color:#fff
+    style AUTH_SERVICE fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    style USER_DB fill:#51cf66,stroke:#2f9e44,color:#fff
+    style REDIS_CACHE fill:#ffd43b,stroke:#f08c00,color:#000
